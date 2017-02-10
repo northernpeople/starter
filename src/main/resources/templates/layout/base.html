@@ -1,12 +1,17 @@
 <!DOCTYPE html>
 <html>
-<head>
-	<div th:include="layout/style"> style </div>	
-	<title>Layout page</title>
-</head>
+	<head>
+		<div th:include="layout/style"> style </div>	
+		<title>Layout page</title>
+	</head>
 <body>
-	
+	<span th:utext="${session.userEmail}"></span>
+	<span th:utext="${session.adminEmail}"></span>
+	<h1>Above content</h1>
+	<hr/>
 	<div layout:fragment="content"></div>
+	<hr/>
+	<h1>Below content</h1>
 	
 </body>
 </html>

@@ -44,14 +44,13 @@ public class AdminC {
 	
 	@RequestMapping(value = "/reset_pass_user/{id}", method = RequestMethod.GET)
     public String resetPassword (@PathVariable("id") Long id, Model model) {
-		System.out.println("resetting");
+		// TODO send email with new temporary password and instructions to change it ASAP.
 		return "redirect:/admin/main";
 	}
 	
 	
 	@RequestMapping(value = "/delete_user/{id}", method = RequestMethod.GET)
     public String delete (@PathVariable("id") Long id, Model model) {
-		System.out.println("deleting");
 		if(! userService.byId(id).getEmail().equalsIgnoreCase(adminEmail)) userService.delete(id);
 		return "redirect:/admin/main";
 	}

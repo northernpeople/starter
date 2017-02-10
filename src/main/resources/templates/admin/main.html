@@ -1,11 +1,10 @@
 <html layout:decorator="layout/base">
 	<section layout:fragment="content">		
 	
-		<a class="btn red" th:href="@{/admin/logout}">sign out</a>
+		<a th:href="@{/admin/logout}">sign out</a>
 		
 		<h1>Users</h1>		    	
 		
-		<div th:if="${! #sets.isEmpty(users)}">
 			<table  th:if="${! #sets.isEmpty(users)}">
 				<tr><th>email</th></tr>
 				<tr th:each="u : ${users}">
@@ -14,14 +13,13 @@
 					<td><a class="btn red" th:href="@{/admin/reset_pass_user/{id}(id=${u.id})}">reset password</a></td>
 				</tr>
 			</table>
-		</div>
 		
 		<h1>Create new user:</h1>
 		
-		<form  action="#" th:action="@{/admin/create}" th:object="${user}" method="post">
-			<input type="text" th:field="*{email}"  	 	placeholder="email" />
-			<input type="submit" value="Submit" />
-		</form>
+			<form  action="#" th:action="@{/admin/create}" th:object="${user}" method="post">
+				<input type="text" th:field="*{email}"  	 	placeholder="email" />
+				<input type="submit" value="Submit" />
+			</form>
 				
 	</section>
 </html>

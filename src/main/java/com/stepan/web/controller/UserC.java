@@ -15,7 +15,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.stepan.model.User;
 import com.stepan.service.EmailService;
 import com.stepan.service.UserService;
-import com.stepan.web.controller.command.PasswordChange;
+import com.stepan.web.command.PasswordChange;
 
 @Controller
 public class UserC {

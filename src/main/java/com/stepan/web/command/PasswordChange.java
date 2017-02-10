@@ -1,4 +1,4 @@
-package com.stepan.web.controller.command;
+package com.stepan.web.command;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;

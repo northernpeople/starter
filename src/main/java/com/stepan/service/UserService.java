@@ -25,7 +25,7 @@ public class UserService {
 	}
 	
 	/**
-	 * Creates new user.
+	 * Creates new user and hashes password.
 	 * @param user user with plain text password
 	 */
 	public void create(User user) {
@@ -36,7 +36,7 @@ public class UserService {
 	}
 	
 	/**
-	 * Updates user.
+	 * Updates user and rehashes password.
 	 * @param user user with plain text password
 	 */
 	public void updatePassword(User user){
