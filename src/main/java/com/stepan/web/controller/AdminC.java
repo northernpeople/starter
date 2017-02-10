@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.stepan.model.User;
+import com.stepan.service.EmailService;
 import com.stepan.service.UserService;
 
 @Controller
@@ -26,6 +27,9 @@ public class AdminC {
 	@Autowired
 	UserService userService;
 	
+	@Autowired
+	EmailService emailService;
+	
 	@Value("${adminEmail}")
 	String adminEmail;
 	
@@ -34,20 +38,21 @@ public class AdminC {
 	
 	@RequestMapping(value = "/create", method = RequestMethod.POST)
 	public String save(@Valid User candidate, Errors errors, RedirectAttributes model) {
-		candidate.setPassword(UUID.randomUUID().toString().replaceAll("_", ""));
-		System.out.println(candidate.getPassword());
+		String tempPassword = UUID.randomUUID().toString().replaceAll("-", "");
+		candidate.setPassword(tempPassword);
 		userService.create(candidate);
-		// TODO SEND EMAIL
+		emailService.send(candidate.getEmail(), "Your account is ready", "Use the following temporary password: "+ tempPassword);
 		return "redirect:/admin/main";
 	}
-	
 	
 	@RequestMapping(value = "/reset_pass_user/{id}", method = RequestMethod.GET)
     public String resetPassword (@PathVariable("id") Long id, Model model) {
-		// TODO send email with new temporary password and instructions to change it ASAP.
+		String tempPassword = UUID.randomUUID().toString().replaceAll("-", "");
+		User user = userService.byId(id);
+		user.setPassword(tempPassword);
+		emailService.send(user.getEmail(), "Your password has been reset", "Use the following temporary password: "+ tempPassword);
 		return "redirect:/admin/main";
 	}
-	
 	
 	@RequestMapping(value = "/delete_user/{id}", method = RequestMethod.GET)
     public String delete (@PathVariable("id") Long id, Model model) {
@@ -89,7 +94,5 @@ public class AdminC {
 		m.addAttribute("users", userService.findAll());
 		return "admin/main";
 	}
-	
-	
-	
+
 }
