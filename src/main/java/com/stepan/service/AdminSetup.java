@@ -23,5 +23,4 @@ public class AdminSetup {
 	public void setUpAdmin(){
 		userService.create(new User(adminEmail, adminPassword));
 	}
-
 }

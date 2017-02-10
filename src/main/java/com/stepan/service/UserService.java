@@ -24,11 +24,24 @@ public class UserService {
 		return repo.findAll();
 	}
 	
+	/**
+	 * Creates new user.
+	 * @param user user with plain text password
+	 */
 	public void create(User user) {
 		if( ! findAll().stream().map( u -> u.getEmail()).collect(Collectors.toSet()).contains(user.getEmail())){
 			user.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt()));
 			repo.saveAndFlush(user);
 		}
+	}
+	
+	/**
+	 * Updates user.
+	 * @param user user with plain text password
+	 */
+	public void updatePassword(User user){
+		user.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt()));
+		repo.saveAndFlush(user);
 	}
 
 	public User byId(Long id) {

@@ -1,5 +1,8 @@
 <html layout:decorator="layout/base">
 	<section layout:fragment="content">		
+	
+		<a class="btn red" th:href="@{/admin/logout}">sign out</a>
+		
 		<h1>Users</h1>		    	
 		
 		<div th:if="${! #sets.isEmpty(users)}">
@@ -9,11 +12,9 @@
 					<td th:text="${u.email}"> email </td>
 					<td><a class="btn red" th:href="@{/admin/delete_user/{id}(id=${u.id})}">delete</a></td>
 					<td><a class="btn red" th:href="@{/admin/reset_pass_user/{id}(id=${u.id})}">reset password</a></td>
-					
 				</tr>
 			</table>
 		</div>
-		
 		
 		<h1>Create new user:</h1>
 		

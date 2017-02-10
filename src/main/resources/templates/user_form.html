@@ -1,0 +1,16 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+	    <title>admin sign in</title>
+	</head>
+	<body>  		      
+		<form  action="#" th:action="@{/login}" th:object="${user}" method="post">
+			<input type="text" th:field="*{email}"  	 	placeholder="email" />
+			<input type="password" th:field="*{password}"  	placeholder="password" />
+			<input type="submit" value="Submit" />
+		</form>
+	</body>
+	
+	<a href="/admin/login_form">admin</a>      			
+	
+</html>

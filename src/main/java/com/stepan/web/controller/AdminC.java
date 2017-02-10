@@ -21,7 +21,7 @@ import com.stepan.service.UserService;
 
 @Controller
 @RequestMapping("/admin")
-public class Admin {
+public class AdminC {
 	
 	@Autowired
 	UserService userService;
@@ -35,6 +35,7 @@ public class Admin {
 	@RequestMapping(value = "/create", method = RequestMethod.POST)
 	public String save(@Valid User candidate, Errors errors, RedirectAttributes model) {
 		candidate.setPassword(UUID.randomUUID().toString().replaceAll("_", ""));
+		System.out.println(candidate.getPassword());
 		userService.create(candidate);
 		// TODO SEND EMAIL
 		return "redirect:/admin/main";
@@ -76,6 +77,12 @@ public class Admin {
 		return "redirect:/admin/login_form";	
 	}
 	
+	@RequestMapping(value = "/logout", method = RequestMethod.GET)
+	public String logout(RedirectAttributes model) {			
+		session.invalidate();
+		model.addFlashAttribute("warning", "Successfully signed out");
+		return "redirect:/";
+	}
 	
 	@RequestMapping("/main")
 	public String main(Model m){
