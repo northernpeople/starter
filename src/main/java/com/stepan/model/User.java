@@ -23,7 +23,14 @@ public class User{
 	@GeneratedValue
 	private Long id;
 
-		public String getEmail() {
+	public User() {}
+
+	public User(String email, String password) {
+		this.email = email;
+		this.password = password;
+	}
+
+	public String getEmail() {
 		return email;
 	}
 
