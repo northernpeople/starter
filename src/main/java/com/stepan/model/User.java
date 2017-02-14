@@ -1,19 +1,30 @@
 package com.stepan.model;
 
-import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.Assert;
 
 @Entity
-public class User{
+public class User implements UserDetails{
 
 	@NotNull
 	@Size(min=5, max=255)
 	@Pattern(regexp = "(\\d|\\w|\\.)+\\@(\\d|\\w|\\.)+\\.(\\d|\\w)+",  message = "example: john.berg@gmail.com")
-	private String email;
+	private String userName;
 	
 	@NotNull
 	@Size(min=7, max=255)
@@ -22,32 +33,29 @@ public class User{
 	@Id
 	@GeneratedValue
 	private Long id;
-	
-	@OneToOne(mappedBy="user")
+		
+	@OneToOne(mappedBy="user", fetch= FetchType.EAGER)
 	private Role role;
-
+	
 	public User() {}
 
 	public User(String email, String password) {
-		this.email = email;
+		this.userName = email;
 		this.password = password;
 	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public String getPassword() {
-		return password;
-	}
+	
+	public String getPassword() { return password; }
 
 	public Long getId() {
 		return id;
 	}
 
+	public String getUserName() {
+		return userName;
+	}
 
-	public void setEmail(String email) {
-		this.email = email;
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 
 	public void setPassword(String password) {
@@ -65,7 +73,8 @@ public class User{
 	public void setRole(Role role) {
 		this.role = role;
 	}
-	
+
+
 	/**
 	 * Creates bidirectional link with new role.
 	 * Overrides existing role.
@@ -83,7 +92,7 @@ public class User{
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((email == null) ? 0 : email.hashCode());
+		result = prime * result + ((userName == null) ? 0 : userName.hashCode());
 		return result;
 	}
 
@@ -96,17 +105,49 @@ public class User{
 		if (getClass() != obj.getClass())
 			return false;
 		User other = (User) obj;
-		if (email == null) {
-			if (other.email != null)
+		if (userName == null) {
+			if (other.userName != null)
 				return false;
-		} else if (!email.equals(other.email))
+		} else if (!userName.equals(other.userName))
 			return false;
 		return true;
 	}
 
 	@Override
-	public String toString() {
-		return "User [email=" + email + ", id=" + id
-				+ "]";
+	public String toString() { return "User [email=" + userName + ", id=" + id+ "]"; }
+
+	
+	// Userdetails:
+	
+	@Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority(role.getName()));
+        return authorities;
+    }
+
+	@Override
+	public String getUsername() {
+		return userName;
+	}
+
+	@Override
+	public boolean isAccountNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isAccountNonLocked() {
+		return true;
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		return true;
 	}
 }

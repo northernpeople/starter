@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import com.stepan.model.Role;
 import com.stepan.model.User;
 
 @Component
@@ -21,6 +22,11 @@ public class AdminSetup {
 	
 	@Scheduled(fixedRate = Long.MAX_VALUE, initialDelay = 100)
 	public void setUpAdmin(){
-		userService.create(new User(adminEmail, adminPassword));
+		Role role = userService.saveRole(new Role("ROLE_ADMIN"));
+		
+		User admin = userService.create(new User(adminEmail, adminPassword));
+		
+		admin.linkNewRole(role);
+		userService.saveRole(role);
 	}
 }

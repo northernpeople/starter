@@ -1,10 +1,13 @@
 package com.stepan.web.controller;
 
+import java.security.Principal;
+
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -26,26 +29,10 @@ public class UserC {
 	@Autowired
 	EmailService emailService;
 	
-	@Autowired
-	HttpSession session;
-	
-	@RequestMapping(value = "/", method = RequestMethod.GET)
+	@RequestMapping(path = {"/login", "/"}, method = RequestMethod.GET)
 	public String userForm(Model model) {
 		model.addAttribute("user", new User());
 		return "user_form";
-	}
-	
-	@RequestMapping(value = "/login", method = RequestMethod.POST)
-	public String login(@Valid User candidate, Errors errors, RedirectAttributes model) {		
-		if(errors.hasErrors()) return "user_form";		
-		
-		User existing = userService.byEmail(candidate.getEmail());
-		if(existing != null && BCrypt.checkpw(candidate.getPassword(), existing.getPassword())){ // sign in attempt with valid password
-				session.setAttribute("userEmail", existing.getEmail());	
-				return "redirect:/main";
-		}
-		
-		return "redirect:/";	
 	}
 	
 	@RequestMapping(value = "/main", method = RequestMethod.GET)
@@ -82,17 +69,11 @@ public class UserC {
 //				"Please contact your administrator if you did not change it");
 		return "redirect:/logout";
 	}
-	
-	@RequestMapping(value = "/logout", method = RequestMethod.GET)
-	public String logout(RedirectAttributes model) {			
-		session.invalidate();
-		model.addFlashAttribute("warning", "Successfully signed out");
-		return "redirect:/";
-	}
-	
-	
-	private User currentUser() {
-		return userService.byEmail((String) session.getAttribute("userEmail"));
-	}
 
+	private User currentUser(){
+		return userService.byUserName(
+				SecurityContextHolder.getContext().getAuthentication().getName()
+				);
+	}
+	
 }

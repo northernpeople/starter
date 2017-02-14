@@ -11,6 +11,14 @@ public class Role {
 
 	private String name;
 	
+	
+	
+	public Role() {}
+
+	public Role(String name) {
+		this.name = name;
+	}
+
 	@OneToOne
 	private User user;
 	
