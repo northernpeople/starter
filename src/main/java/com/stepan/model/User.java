@@ -1,11 +1,11 @@
 package com.stepan.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+
+import org.springframework.util.Assert;
 
 @Entity
 public class User{
@@ -22,6 +22,9 @@ public class User{
 	@Id
 	@GeneratedValue
 	private Long id;
+	
+	@OneToOne(mappedBy="user")
+	private Role role;
 
 	public User() {}
 
@@ -53,6 +56,27 @@ public class User{
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public Role getRole() {
+		return role;
+	}
+
+	public void setRole(Role role) {
+		this.role = role;
+	}
+	
+	/**
+	 * Creates bidirectional link with new role.
+	 * Overrides existing role.
+	 * @param r
+	 */
+	public void linkNewRole(Role r){
+		Assert.notNull(r);
+		Assert.notNull(this.getId(), "user must have persistent identity to be linked with new role");
+		Assert.notNull(r.getId(), "role must have persistent identity to be linked with user");
+		this.role = r;
+		r.setUser(this);
 	}
 
 	@Override

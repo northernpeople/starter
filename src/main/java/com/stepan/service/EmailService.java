@@ -9,6 +9,7 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
@@ -16,10 +17,10 @@ import org.springframework.stereotype.Service;
 public class EmailService {
 
 
-//@Value("${email}")
+@Value("${email}")
 private String email;
 	
-//@Value("${password}")
+@Value("${password}")
 private String password;
 
 	@Async
