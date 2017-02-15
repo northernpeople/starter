@@ -46,7 +46,9 @@ public class AdminC {
 	
 	@RequestMapping(value = "/delete_user/{id}", method = RequestMethod.GET)
     public String delete (@PathVariable("id") Long id, Model model) {
-		if(! userService.byId(id).getUserName().equalsIgnoreCase(adminEmail)) userService.delete(id);
+		if(! userService.byId(id).getUserName().equalsIgnoreCase(adminEmail)){
+			userService.delete(id);
+		}
 		return "redirect:/admin/main";
 	}
 	
