@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -77,5 +78,12 @@ public class UserService implements UserDetailsService{
 	public User saveAndFlush(User user) {
 		return repo.saveAndFlush(user);
 		
+	}
+	
+
+	public User currentUser(){
+		return byUserName(
+				SecurityContextHolder.getContext().getAuthentication().getName()
+				);
 	}
 }

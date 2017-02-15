@@ -52,7 +52,7 @@ public class UserC {
 			model.addFlashAttribute("warning", "something is not right");
 			return "change_password_form";		
 		}
-		User current = currentUser();
+		User current = userService.currentUser();
 		if(current == null || ! BCrypt.checkpw(request.getOld(), current.getPassword())){
 			model.addFlashAttribute("warning", "please sign in again");
 			return "redirect:/";
@@ -62,7 +62,6 @@ public class UserC {
 			return "change_password_form";		
 		}
 		current.setPassword(request.getNew1());
-		System.out.println(request.getNew1());
 		userService.updatePassword(current);
 //		emailService.send(current.getEmail(), 
 //				"Your password for reminder service has been changed!", 
@@ -70,10 +69,5 @@ public class UserC {
 		return "redirect:/logout";
 	}
 
-	private User currentUser(){
-		return userService.byUserName(
-				SecurityContextHolder.getContext().getAuthentication().getName()
-				);
-	}
 	
 }
