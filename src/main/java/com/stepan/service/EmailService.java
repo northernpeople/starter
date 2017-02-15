@@ -26,25 +26,25 @@ private String password;
 	@Async
 	public void send(String to, String subject, String text) {
 	
-	    Properties props = System.getProperties();
-	    props.put("mail.smtp.host", "smtp.gmail.com");
-	    props.put("mail.smtp.user", email);
-	    props.put("mail.smtp.password", password);
-	    props.put("mail.smtp.port", "587"); 
-	    props.put("mail.smtp.auth", "true");
-	    props.put("mail.smtp.starttls.enable", "true");
-	    try{
-	        Session session = Session.getDefaultInstance(props, null);
-	        MimeMessage message = new MimeMessage(session);
-	        message.setFrom(new InternetAddress(email));
-	        message.addRecipients(Message.RecipientType.TO, to);
-	        message.setSubject(subject);
-	        message.setText(text);
-	        Transport transport = session.getTransport("smtp");
-	        transport.connect("smtp.gmail.com", email, password);
-	        transport.sendMessage(message, message.getAllRecipients());
-	    }catch(MessagingException e){
-	        e.printStackTrace();
-	    }
+//	    Properties props = System.getProperties();
+//	    props.put("mail.smtp.host", "smtp.gmail.com");
+//	    props.put("mail.smtp.user", email);
+//	    props.put("mail.smtp.password", password);
+//	    props.put("mail.smtp.port", "587"); 
+//	    props.put("mail.smtp.auth", "true");
+//	    props.put("mail.smtp.starttls.enable", "true");
+//	    try{
+//	        Session session = Session.getDefaultInstance(props, null);
+//	        MimeMessage message = new MimeMessage(session);
+//	        message.setFrom(new InternetAddress(email));
+//	        message.addRecipients(Message.RecipientType.TO, to);
+//	        message.setSubject(subject);
+//	        message.setText(text);
+//	        Transport transport = session.getTransport("smtp");
+//	        transport.connect("smtp.gmail.com", email, password);
+//	        transport.sendMessage(message, message.getAllRecipients());
+//	    }catch(MessagingException e){
+//	        e.printStackTrace();
+//	    }
     }
 }

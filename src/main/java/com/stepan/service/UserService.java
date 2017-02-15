@@ -60,6 +60,7 @@ public class UserService implements UserDetailsService{
 	}
 
 	public void delete(Long id) {
+		roleRepo.delete(byId(id).getRole().getId());
 		repo.delete(id);	
 	}
 	
