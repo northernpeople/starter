@@ -24,7 +24,7 @@ public class User implements UserDetails{
 	@NotNull
 	@Size(min=5, max=255)
 	@Pattern(regexp = "(\\d|\\w|\\.)+\\@(\\d|\\w|\\.)+\\.(\\d|\\w)+",  message = "example: john.berg@gmail.com")
-	private String userName;
+	private String username;
 	
 	@NotNull
 	@Size(min=7, max=255)
@@ -40,7 +40,7 @@ public class User implements UserDetails{
 	public User() {}
 
 	public User(String email, String password) {
-		this.userName = email;
+		this.username = email;
 		this.password = password;
 	}
 	
@@ -49,13 +49,13 @@ public class User implements UserDetails{
 	public Long getId() {
 		return id;
 	}
-
-	public String getUserName() {
-		return userName;
+	
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
-	public void setUserName(String userName) {
-		this.userName = userName;
+	public void setUserName(String username) {
+		this.username = username;
 	}
 
 	public void setPassword(String password) {
@@ -92,7 +92,7 @@ public class User implements UserDetails{
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((userName == null) ? 0 : userName.hashCode());
+		result = prime * result + ((username == null) ? 0 : username.hashCode());
 		return result;
 	}
 
@@ -105,16 +105,16 @@ public class User implements UserDetails{
 		if (getClass() != obj.getClass())
 			return false;
 		User other = (User) obj;
-		if (userName == null) {
-			if (other.userName != null)
+		if (username == null) {
+			if (other.username != null)
 				return false;
-		} else if (!userName.equals(other.userName))
+		} else if (!username.equals(other.username))
 			return false;
 		return true;
 	}
 
 	@Override
-	public String toString() { return "User [email=" + userName + ", id=" + id+ "]"; }
+	public String toString() { return "User [username=" + username + ", id=" + id+ "]"; }
 
 	
 	// Userdetails:
@@ -128,7 +128,7 @@ public class User implements UserDetails{
 
 	@Override
 	public String getUsername() {
-		return userName;
+		return username;
 	}
 
 	@Override

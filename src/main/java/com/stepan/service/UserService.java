@@ -25,8 +25,8 @@ public class UserService implements UserDetailsService{
 	@Autowired
 	RoleRepository roleRepo;
 
-	public User byUserName(String userName) {
-		return repo.findByUserName(userName);
+	public User byUserName(String username) {
+		return repo.findByUsername(username);
 	}
 
 	public List<User> findAll() {
@@ -38,19 +38,27 @@ public class UserService implements UserDetailsService{
 	 * @param user user with plain text password
 	 * @return 
 	 */
-	public User create(User user) {
-		if( ! findAll().stream().map( u -> u.getUserName()).collect(Collectors.toSet()).contains(user.getUserName())){
+	public User create(User user, String inRole) {
+		if( ! usernameTaken(user)){
+			Role role = saveRole(new Role(inRole));
 			user.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt()));
-			return repo.saveAndFlush(user);
-		}
+			user = saveAndFlush(user);
+			user.linkNewRole(role);
+			saveRole(role); // saves link
+			return user;
+		}	
 		return null;
+	}
+
+	private boolean usernameTaken(User user) {
+		return findAll().stream().map( u -> u.getUsername()).collect(Collectors.toSet()).contains(user.getUsername());
 	}
 	
 	/**
 	 * Updates user and rehashes password.
 	 * @param user user with plain text password
 	 */
-	public void updatePassword(User user){
+	public void rehashPassword(User user){
 		user.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt()));
 		repo.saveAndFlush(user);
 	}
@@ -70,7 +78,6 @@ public class UserService implements UserDetailsService{
 
 	@Override
 	public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
-		System.out.println("finding by username "+ userName);
 		UserDetails details = byUserName(userName);
 		if (details == null) throw new UsernameNotFoundException("user not found: "+userName);
 		return details;
@@ -81,7 +88,6 @@ public class UserService implements UserDetailsService{
 		
 	}
 	
-
 	public User currentUser(){
 		return byUserName(
 				SecurityContextHolder.getContext().getAuthentication().getName()

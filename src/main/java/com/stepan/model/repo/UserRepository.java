@@ -7,5 +7,5 @@ import com.stepan.model.User;
 
 public interface UserRepository extends JpaRepository<User, Long> {
 
-	public User findByUserName(String userName);
+	public User findByUsername(String userName);
 }

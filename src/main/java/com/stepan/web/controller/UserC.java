@@ -1,13 +1,9 @@
 package com.stepan.web.controller;
 
-import java.security.Principal;
-
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -16,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.stepan.model.User;
-import com.stepan.service.EmailService;
 import com.stepan.service.UserService;
+import com.stepan.service.email.EmailService;
 import com.stepan.web.command.PasswordChange;
 
 @Controller
@@ -52,8 +48,8 @@ public class UserC {
 			model.addFlashAttribute("warning", "something is not right");
 			return "change_password_form";		
 		}
-		User current = userService.currentUser();
-		if(current == null || ! BCrypt.checkpw(request.getOld(), current.getPassword())){
+		User currentUser = userService.currentUser();
+		if(currentUser == null || ! BCrypt.checkpw(request.getOld(), currentUser.getPassword())){
 			model.addFlashAttribute("warning", "please sign in again");
 			return "redirect:/";
 		}
@@ -61,11 +57,11 @@ public class UserC {
 			errors.rejectValue("new2", "Match", "new passwords must match");
 			return "change_password_form";		
 		}
-		current.setPassword(request.getNew1());
-		userService.updatePassword(current);
-//		emailService.send(current.getEmail(), 
-//				"Your password for reminder service has been changed!", 
-//				"Please contact your administrator if you did not change it");
+		currentUser.setPassword(request.getNew1());
+		userService.rehashPassword(currentUser);
+		emailService.send(currentUser.getUsername(), 
+				"Your password has been changed!", 
+				"Please contact your administrator if you did not change it");
 		return "redirect:/logout";
 	}
 
