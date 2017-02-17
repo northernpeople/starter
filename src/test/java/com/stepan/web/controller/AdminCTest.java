@@ -19,6 +19,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
+import com.stepan.model.Role;
 import com.stepan.model.User;
 import com.stepan.service.UserService;
 import com.stepan.service.email.EmailService;
@@ -71,9 +72,13 @@ public class AdminCTest {
 	
 	@Test
 	public void shouldDeleteUser() throws Exception{
-		Mockito.when(uService.byId(1L)).thenReturn(
-				new User("as@ss.ss", BCrypt.hashpw("password", BCrypt.gensalt()))
-				);
+		User u = new User("as@ss.ss", BCrypt.hashpw("password", BCrypt.gensalt()));
+		u.setId(1L);
+		Role r = new Role("ROLE_USER");
+		r.setId(1L);
+		u.linkNewRole(r);
+		
+		Mockito.when(uService.byId(1L)).thenReturn(u);
 		mockMvc.perform(get("/admin/delete_user/1"))
 			.andExpect(redirectedUrl("/admin/main"));
 		verify(uService).delete(1L);
@@ -82,9 +87,13 @@ public class AdminCTest {
 	
 	@Test
 	public void shouldSaveUser() throws Exception{
-		Mockito.when(uService.byId(1L)).thenReturn(
-				new User("as@ss.ss", BCrypt.hashpw("password", BCrypt.gensalt()))
-				);
+		User u = new User("as@ss.ss", BCrypt.hashpw("password", BCrypt.gensalt()));
+		u.setId(1L);
+		Role r = new Role("ROLE_USER");
+		r.setId(1L);
+		u.linkNewRole(r);
+		
+		Mockito.when(uService.byId(1L)).thenReturn(u);
 		mockMvc.perform(get("/admin/delete_user/1"))
 			.andExpect(status().is3xxRedirection())
 			.andExpect(redirectedUrl("/admin/main"));

@@ -50,7 +50,7 @@ public class UserService implements UserDetailsService{
 		return null;
 	}
 
-	private boolean usernameTaken(User user) {
+	public boolean usernameTaken(User user) {
 		return findAll().stream().map( u -> u.getUsername()).collect(Collectors.toSet()).contains(user.getUsername());
 	}
 	
@@ -74,6 +74,10 @@ public class UserService implements UserDetailsService{
 	
 	public Role saveRole(Role role){
 		return roleRepo.saveAndFlush(role);
+	}
+	
+	public List<Role> allRoles(){
+		return roleRepo.findAll();
 	}
 
 	@Override

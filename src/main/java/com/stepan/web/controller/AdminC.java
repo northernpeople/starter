@@ -28,9 +28,6 @@ public class AdminC {
 	@Autowired
 	EmailService emailService;
 	
-	@Value("${adminEmail}")
-	String adminEmail;
-	
 	@RequestMapping(value = "/reset_pass_user/{id}", method = RequestMethod.GET)
     public String resetPassword (@PathVariable("id") Long id, Model model) {
 		String tempPassword = UUID.randomUUID().toString().replaceAll("-", "");
@@ -43,10 +40,18 @@ public class AdminC {
 	
 	@RequestMapping(value = "/delete_user/{id}", method = RequestMethod.GET)
     public String delete (@PathVariable("id") Long id, Model model) {
-		if(! userService.byId(id).getUsername().equalsIgnoreCase(adminEmail)){
+		System.out.println(admin(id));
+		if(! admin(id)){
 			userService.delete(id);
 		}
 		return "redirect:/admin/main";
+	}
+
+	private boolean admin(Long id) {
+		return userService
+				.byId(id)
+				.getRole()
+				.getName().equalsIgnoreCase("ROLE_ADMIN");
 	}
 	
 	@RequestMapping(value = "/create", method = RequestMethod.POST)
