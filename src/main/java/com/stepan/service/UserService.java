@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -67,6 +68,7 @@ public class UserService implements UserDetailsService{
 		return repo.findOne(id);
 	}
 
+	@Secured("ROLE_ADMIN")
 	public void delete(Long id) {
 		roleRepo.delete(byId(id).getRole().getId());
 		repo.delete(id);	

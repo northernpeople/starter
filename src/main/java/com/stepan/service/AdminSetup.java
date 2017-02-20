@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import com.stepan.model.User;
 
 @Component
-@Profile("production")
+@Profile({"production", "dev"})
 public class AdminSetup {
 	
 	@Value("${adminEmail}")
@@ -24,5 +24,6 @@ public class AdminSetup {
 	@Scheduled(fixedRate = Long.MAX_VALUE)
 	public void setUpAdmin(){
 		userService.create(new User(adminEmail, adminPassword), "ROLE_ADMIN");
+		System.out.println("admin account set up: "+adminEmail +" : ******"+ adminPassword.substring(6));
 	}
 }
